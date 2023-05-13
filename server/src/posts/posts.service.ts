@@ -4,42 +4,35 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Posts } from 'src/schemas/posts.schema';
 import { Model } from 'mongoose';
-import { Response } from 'express';
+import { Request } from 'express';
 
 @Injectable()
 export class PostsService {
   constructor(@InjectModel(Posts.name) private PostsModel: Model<Posts>) {}
 
-  async create(createPostDto: CreatePostDto) {
-    try {
-      const FindPost = await this.PostsModel.findOne({
-        slug: createPostDto.slug,
-      });
+  async create(createPostDto: CreatePostDto, req: any) {
+    const { id } = req.user;
+    const FindPost = await this.PostsModel.findOne({
+      slug: createPostDto.slug,
+    });
 
-      if (FindPost) {
-        return {
-          statusCode: 400,
-          message: '',
-          data: '',
-        };
-      }
-
-      await this.PostsModel.create(createPostDto);
+    if (FindPost) {
       return {
-        statusCode: 201,
-        message: 'مطلب با موفقیت منتشر شد.',
-        error: '',
-        data: '',
-      };
-    } catch (err) {
-      console.log(err);
-      return {
-        statusCode: 500,
+        statusCode: 400,
         message: '',
-        error: 'خطا در سرور خط داد',
         data: '',
       };
     }
+    
+    createPostDto.author = id;
+
+    await this.PostsModel.create(createPostDto);
+    return {
+      statusCode: 201,
+      message: 'مطلب با موفقیت منتشر شد.',
+      error: '',
+      data: '',
+    };
   }
 
   async findAll() {
@@ -98,15 +91,6 @@ export class PostsService {
         { slug: slug },
         { ...updatePostDto },
       );
-
-      if (!updatePostDto) {
-        return {
-          statusCode: 204,
-          message: '',
-          error: '',
-          data: '',
-        };
-      }
 
       if (!FindPost) {
         return {

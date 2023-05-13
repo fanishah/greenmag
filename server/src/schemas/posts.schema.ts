@@ -1,5 +1,4 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import * as moment from 'moment';
 import { HydratedDocument } from 'mongoose';
 import * as uid from 'uid2';
 
@@ -31,14 +30,8 @@ export class Posts {
   @Prop({ required: true, default: uid(10).toLowerCase() })
   post_id: String;
 
-  @Prop({ required: true , default: 0 })
+  @Prop({ required: true, default: 0 })
   visit: Number;
-
-  @Prop({ default: moment().format() })
-  createdAt: String;
-
-  @Prop({ default: moment().format() })
-  updatedAt: String;
 }
 
 export const PostsSchema = SchemaFactory.createForClass(Posts);

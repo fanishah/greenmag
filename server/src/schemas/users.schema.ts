@@ -14,6 +14,9 @@ export class Users {
   @Prop({ required: true })
   email: String;
 
+  @Prop({ required: true, default: 10 })
+  role: Number;
+
   @Prop({ required: true })
   nicename: String;
 

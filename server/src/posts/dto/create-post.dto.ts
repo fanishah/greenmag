@@ -8,6 +8,7 @@ export class CreatePostDto {
   content: String;
 
   @IsString()
+  @IsOptional()
   author: String;
 
   @IsBoolean()

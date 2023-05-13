@@ -6,7 +6,7 @@ import {
   IsNumber,
 } from 'class-validator';
 
-export class CreateUserDto {
+export class RegisterAuthDto {
   @IsString()
   username: string;
 
@@ -15,7 +15,6 @@ export class CreateUserDto {
 
   @IsEmail()
   email: string;
-
   @IsNumber()
   @IsOptional()
   role: Number;
