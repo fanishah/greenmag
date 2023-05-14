@@ -4,6 +4,8 @@ import { LoggerMiddleware } from './logger/logger.middleware';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
+import { CategorysModule } from './categorys/categorys.module';
+import { CategorypostModule } from './categorypost/categorypost.module';
 
 @Module({
   imports: [
@@ -11,6 +13,8 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     PostsModule,
     AuthModule,
+    CategorysModule,
+    CategorypostModule,
   ],
   providers: [],
 })

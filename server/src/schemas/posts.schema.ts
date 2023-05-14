@@ -1,19 +1,23 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import mongoose, { HydratedDocument } from 'mongoose';
 import * as uid from 'uid2';
+import { Users } from './users.schema';
 
 export type PostsDocument = HydratedDocument<Posts>;
 
 @Schema({ timestamps: true })
 export class Posts {
   @Prop({ required: true })
-  title: String;
+  title: string;
 
   @Prop({ required: true })
-  content: String;
+  content: string;
 
   @Prop({ required: true })
-  author: String;
+  author: string;
+
+  @Prop({ required: true })
+  category: string;
 
   @Prop({ required: true, default: true })
   comment_status: Boolean;
@@ -25,10 +29,10 @@ export class Posts {
   ispin: Boolean;
 
   @Prop({ required: true })
-  slug: String;
+  slug: string;
 
   @Prop({ required: true, default: uid(10).toLowerCase() })
-  post_id: String;
+  post_id: string;
 
   @Prop({ required: true, default: 0 })
   visit: Number;

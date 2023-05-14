@@ -2,14 +2,17 @@ import { IsString, IsBoolean, IsNumber, IsOptional } from 'class-validator';
 
 export class CreatePostDto {
   @IsString()
-  title: String;
+  title: string;
 
   @IsString()
-  content: String;
+  content: string;
 
   @IsString()
   @IsOptional()
-  author: String;
+  author: string;
+
+  @IsString()
+  category: string;
 
   @IsBoolean()
   @IsOptional()
@@ -24,7 +27,7 @@ export class CreatePostDto {
   ispin: Boolean;
 
   @IsString()
-  slug: String;
+  slug: string;
 
   @IsString()
   @IsOptional()

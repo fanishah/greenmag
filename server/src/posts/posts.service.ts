@@ -23,8 +23,9 @@ export class PostsService {
         data: '',
       };
     }
-    
-    createPostDto.author = id;
+    if (!createPostDto.author) {
+      createPostDto.author = id;
+    }
 
     await this.PostsModel.create(createPostDto);
     return {

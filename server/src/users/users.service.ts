@@ -12,7 +12,6 @@ export class UsersService {
 
   // ایجاد کاربر جدید
   async create(createUserDto: CreateUserDto, req?: any) {
-    console.log(req.user);
     const { username, pass, email } = createUserDto;
 
     const findUsername = await this.findByUsername(username);
@@ -24,7 +23,7 @@ export class UsersService {
 
     const hashPass = await hash(pass, 10);
 
-    const createUser = await this.UsersModel.create({
+    await this.UsersModel.create({
       ...createUserDto,
       pass: hashPass,
       nicename: username,
