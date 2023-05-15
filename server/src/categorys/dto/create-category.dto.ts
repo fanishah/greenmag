@@ -9,9 +9,5 @@ export class CreateCategoryDto {
 
   @IsString()
   @IsOptional()
-  category_id: string;
-
-  @IsString()
-  @IsOptional()
   idsub: string;
 }

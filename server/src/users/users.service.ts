@@ -84,6 +84,27 @@ export class UsersService {
     };
   }
 
+  // دریافت کاربر بر اساس نام آیدی
+  async findById(id: string) {
+    const findUser = await this.UsersModel.findOne({
+      _id: id,
+    });
+
+    if (!findUser) {
+      return {
+        statusCode: 400,
+        data: 'کاربری با این آیدی وجود ندارد',
+      };
+    }
+
+    return {
+      statusCode: 200,
+      message: '',
+      data: findUser,
+    };
+  }
+  F;
+
   // بروزرسانی کاربر
   async update(username: string, updateUserDto: UpdateUserDto) {
     const updateUser = await this.UsersModel.updateOne(

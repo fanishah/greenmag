@@ -4,18 +4,19 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Categorys } from 'src/schemas/categorys.schema';
 import { Model } from 'mongoose';
+import { PostsService } from 'src/posts/posts.service';
 
 @Injectable()
 export class CategorysService {
   constructor(
     @InjectModel(Categorys.name) private CategorysModel: Model<Categorys>,
+    private readonly postsService: PostsService,
   ) {}
-
+  // اکشن های مختلف برای دسته ها در بخش مدیریت
   async create(createCategoryDto: CreateCategoryDto) {
     const fineCategory = await this.CategorysModel.findOne({
       slug: createCategoryDto.slug,
     });
-
     if (fineCategory) {
       return {
         statusCode: 400,
@@ -30,7 +31,6 @@ export class CategorysService {
       data: '',
     };
   }
-
   async findAll() {
     const findAll = await this.CategorysModel.find();
     return {
@@ -42,7 +42,7 @@ export class CategorysService {
   async findOne(slug: string) {
     const findCategory = await this.CategorysModel.find({ slug });
 
-    if (!findCategory) {
+    if (findCategory.length < 1) {
       return {
         statusCode: 204,
         error: 'دسته ای یافت نشد.',
@@ -91,5 +91,20 @@ export class CategorysService {
       statusCode: 201,
       message: 'دسته با موفقیت حذف شد.',
     };
+  }
+
+  // اکشن های مختلف برای دسته ها در بخش کاربران
+  async findOneCtergoryPost(slug) {
+    const { data: categoryData } = await this.findOne(slug);
+    let PostsCategory: any = [];
+    for (let i = 0; i < categoryData.length; i++) {
+      const posts = await this.postsService.findOneInCategory(
+        categoryData[i].id,
+      );
+      if (posts) {
+        PostsCategory.push(posts);
+      }
+    }
+    return PostsCategory;
   }
 }

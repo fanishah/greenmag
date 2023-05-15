@@ -12,9 +12,6 @@ export class Categorys {
   @Prop({ required: true })
   slug: string;
 
-  @Prop({ required: true, default: uuidv4() })
-  category_id: string;
-
   @Prop({ required: true, default: 0 })
   idsub: string;
 }
