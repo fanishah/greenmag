@@ -52,7 +52,6 @@ export class UsersService {
 
     return {
       statusCode: 200,
-      message: '',
       data: allUser,
     };
   }
@@ -96,7 +95,6 @@ export class UsersService {
 
     return {
       statusCode: 200,
-      message: '',
       data: findUser,
     };
   }
@@ -118,7 +116,6 @@ export class UsersService {
 
     return {
       statusCode: 200,
-      message: '',
       data: findUser,
     };
   }
