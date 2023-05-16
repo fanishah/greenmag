@@ -26,8 +26,8 @@ export class UsersController {
 
   @Get()
   @UseGuards(AuthGuard)
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Req() req: Request) {
+    return this.usersService.findAll(req);
   }
 
   @Get(':username')
@@ -41,13 +41,14 @@ export class UsersController {
   update(
     @Param('username') username: string,
     @Body() updateUserDto: UpdateUserDto,
+    @Req() req: Request,
   ) {
-    return this.usersService.update(username, updateUserDto);
+    return this.usersService.update(username, updateUserDto, req);
   }
 
   @Delete(':username')
   @UseGuards(AuthGuard)
-  remove(@Param('username') username: string) {
-    return this.usersService.remove(username);
+  remove(@Param('username') username: string, @Req() req: Request) {
+    return this.usersService.remove(username, req);
   }
 }
