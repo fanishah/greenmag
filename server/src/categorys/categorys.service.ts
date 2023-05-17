@@ -12,18 +12,34 @@ export class CategorysService {
     @InjectModel(Categorys.name) private CategorysModel: Model<Categorys>,
     private readonly postsService: PostsService,
   ) {}
+
   // اکشن های مختلف برای دسته ها در بخش مدیریت
-  async create(createCategoryDto: CreateCategoryDto) {
+  // ساخت دسته جدید
+  async create(createCategoryDto: CreateCategoryDto, req?: any) {
+    const { role } = req.user;
+
+    // بررسی نقش کاربر
+    if (role === 10) {
+      return {
+        statusCode: 403,
+        error: 'شما به این بخش دسترسی ندارید',
+      };
+    }
+
     const fineCategory = await this.CategorysModel.findOne({
       slug: createCategoryDto.slug,
     });
+
+    // شرط وجود داشتن دسته با اسلاگ کاربر
     if (fineCategory) {
       return {
         statusCode: 400,
         error: 'این نشانی دسته قبلا ثبت شده است.',
       };
     }
+
     await this.CategorysModel.create(createCategoryDto);
+
     return {
       statusCode: 201,
       message: 'دسته با موفقیت ثبت شد.',
@@ -31,6 +47,8 @@ export class CategorysService {
       data: '',
     };
   }
+
+  // دریافت همه دسته ها
   async findAll() {
     const findAll = await this.CategorysModel.find();
     return {
@@ -42,6 +60,7 @@ export class CategorysService {
   async findOne(slug: string) {
     const findCategory = await this.CategorysModel.find({ slug });
 
+    // دسته وجود ندارد
     if (findCategory.length < 1) {
       return {
         statusCode: 204,
@@ -49,6 +68,7 @@ export class CategorysService {
       };
     }
 
+    // دریافت زیر شاخه دسته
     let findSubCategoey = await this.CategorysModel.find({
       idsub: findCategory[0].id,
     });
@@ -59,12 +79,24 @@ export class CategorysService {
     };
   }
 
-  async update(slug: string, updateCategoryDto: UpdateCategoryDto) {
+  // بروزرسانی دسته
+  async update(slug: string, updateCategoryDto: UpdateCategoryDto, req?: any) {
+    const { role } = req.user;
+
+    // بررسی نقش کاربر
+    if (role === 10) {
+      return {
+        statusCode: 403,
+        error: 'شما به این بخش دسترسی ندارید',
+      };
+    }
+
     const updateCategory = await this.CategorysModel.updateOne(
       { slug },
       updateCategoryDto,
     );
 
+    // شرط نبود دسته
     if (!updateCategory.modifiedCount) {
       return {
         statusCode: 204,
@@ -78,8 +110,21 @@ export class CategorysService {
     };
   }
 
-  async remove(slug: string) {
+  // حذف دسته
+  async remove(slug: string, req?: any) {
+    const { role } = req.user;
+
+    // بررسی نقش کاربر
+    if (role === 10) {
+      return {
+        statusCode: 403,
+        error: 'شما به این بخش دسترسی ندارید',
+      };
+    }
+
     const deleteCategory = await this.CategorysModel.deleteOne({ slug });
+
+    // شرط نبود دسته
     if (!deleteCategory.deletedCount) {
       return {
         statusCode: 204,
@@ -94,17 +139,28 @@ export class CategorysService {
   }
 
   // اکشن های مختلف برای دسته ها در بخش کاربران
+  // دریافت تمام پست های یه دسته با اسلاگ
   async findOneCtergoryPost(slug) {
+    // دریافت دسته همراه با زیرشاخه
     const { data: categoryData } = await this.findOne(slug);
-    let PostsCategory: any = [];
+
+    let PostsCategory: any = []; // پست ها
+
+    // دریافت تمام پست ها دسته و زیرشاخه
     for (let i = 0; i < categoryData.length; i++) {
+      // دریافت پست
       const posts = await this.postsService.findOneInCategory(
         categoryData[i].id,
       );
+      // شرط پیدا یا بودن پست در دسته مورد نظر
       if (posts) {
         PostsCategory.push(posts);
       }
     }
-    return PostsCategory;
+
+    return {
+      statusCode: 201,
+      data: PostsCategory,
+    };
   }
 }
