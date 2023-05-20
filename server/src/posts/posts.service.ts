@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Posts } from 'src/schemas/posts.schema';
 import { Model } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
+import { find } from 'rxjs';
 
 @Injectable()
 export class PostsService {
@@ -15,7 +16,15 @@ export class PostsService {
 
   // ایجاد پست
   async create(createPostDto: CreatePostDto, req: any) {
-    const { id } = req.user;
+    const { id, role } = req.user;
+
+    // بررسی نقش کاربر
+    if (role === 10) {
+      return {
+        statusCode: 403,
+        error: 'شما به این بخش دسترسی ندارید',
+      };
+    }
 
     // پیدا کردن پستی به اسلاگ دریافتی
     const FindPost = await this.PostsModel.findOne({
@@ -65,11 +74,13 @@ export class PostsService {
     // دریفات اطلاعات نویسنده
     const { data }: any = await this.usersService.findById(FindPost.author);
 
-    // تغییر آیدی نویسنده به نام نمایشی نویسنده
-    FindPost.author = data.display_name;
-
     //افزایش بازدید پست
     FindPost.visit = +FindPost.visit + 1;
+    await FindPost.save();
+
+    // تغییر آیدی نویسنده به نام نمایشی نویسنده
+    // فقط برای بازدید کننده
+    FindPost.author = data.display_name;
 
     return {
       statusCode: 200,
@@ -91,7 +102,17 @@ export class PostsService {
   }
 
   // آپدیت پست
-  async update(slug: string, updatePostDto: UpdatePostDto) {
+  async update(slug: string, updatePostDto: UpdatePostDto, req?: any) {
+    const { role } = req.user;
+
+    // بررسی نقش کاربر
+    if (role === 10) {
+      return {
+        statusCode: 403,
+        error: 'شما به این بخش دسترسی ندارید',
+      };
+    }
+
     const FindPost = await this.PostsModel.updateOne(
       { slug: slug },
       updatePostDto,
@@ -112,7 +133,17 @@ export class PostsService {
   }
 
   // حذف پست
-  async remove(slug: string) {
+  async remove(slug: string, req?: any) {
+    const { role } = req.user;
+
+    // بررسی نقش کاربر
+    if (role === 10) {
+      return {
+        statusCode: 403,
+        error: 'شما به این بخش دسترسی ندارید',
+      };
+    }
+
     const findPost = await this.PostsModel.deleteOne({ slug });
 
     // شرط نبود پست

@@ -37,13 +37,17 @@ export class PostsController {
 
   @Patch(':slug')
   @UseGuards(AuthGuard)
-  update(@Param('slug') slug: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postsService.update(slug, updatePostDto);
+  update(
+    @Param('slug') slug: string,
+    @Body() updatePostDto: UpdatePostDto,
+    @Req() req: Request,
+  ) {
+    return this.postsService.update(slug, updatePostDto, req);
   }
 
   @Delete(':slug')
   @UseGuards(AuthGuard)
-  remove(@Param('slug') slug: string) {
-    return this.postsService.remove(slug);
+  remove(@Param('slug') slug: string, @Req() req: Request) {
+    return this.postsService.remove(slug, req);
   }
 }
