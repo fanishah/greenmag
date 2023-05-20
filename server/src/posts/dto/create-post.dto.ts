@@ -31,9 +31,9 @@ export class CreatePostDto {
 
   @IsString()
   @IsOptional()
-  post_id: Number;
+  post_id: number;
 
   @IsNumber()
   @IsOptional()
-  visit: Number;
+  visit: number;
 }

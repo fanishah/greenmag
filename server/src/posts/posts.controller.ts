@@ -41,9 +41,9 @@ export class PostsController {
     return this.postsService.update(slug, updatePostDto);
   }
 
-  @Delete(':id')
+  @Delete(':slug')
   @UseGuards(AuthGuard)
-  remove(@Param('id') id: string) {
-    return this.postsService.remove(+id);
+  remove(@Param('slug') slug: string) {
+    return this.postsService.remove(slug);
   }
 }
