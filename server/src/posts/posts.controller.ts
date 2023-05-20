@@ -35,14 +35,14 @@ export class PostsController {
     return this.postsService.findOne(slug);
   }
 
-  @Patch(':slug')
+  @Patch(':id')
   @UseGuards(AuthGuard)
   update(
-    @Param('slug') slug: string,
+    @Param('id') id: string,
     @Body() updatePostDto: UpdatePostDto,
     @Req() req: Request,
   ) {
-    return this.postsService.update(slug, updatePostDto, req);
+    return this.postsService.update(id, updatePostDto, req);
   }
 
   @Delete(':slug')

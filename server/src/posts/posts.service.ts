@@ -102,7 +102,7 @@ export class PostsService {
   }
 
   // آپدیت پست
-  async update(slug: string, updatePostDto: UpdatePostDto, req?: any) {
+  async update(id: string, updatePostDto: UpdatePostDto, req?: any) {
     const { role } = req.user;
 
     // بررسی نقش کاربر
@@ -113,10 +113,7 @@ export class PostsService {
       };
     }
 
-    const FindPost = await this.PostsModel.updateOne(
-      { slug: slug },
-      updatePostDto,
-    );
+    const FindPost = await this.PostsModel.updateOne({ id }, updatePostDto);
 
     // شرط نبود پست به اسلاگ دریافتی
     if (!FindPost.modifiedCount) {

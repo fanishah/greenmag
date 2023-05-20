@@ -29,10 +29,6 @@ export class CreatePostDto {
   @IsString()
   slug: string;
 
-  @IsString()
-  @IsOptional()
-  post_id: number;
-
   @IsNumber()
   @IsOptional()
   visit: number;
