@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Categorys } from 'src/schemas/categorys.schema';
+import { Category } from 'src/schemas/category.schema';
 import { Model } from 'mongoose';
 import { PostsService } from 'src/posts/posts.service';
 
 @Injectable()
-export class CategorysService {
+export class CategoryService {
   constructor(
-    @InjectModel(Categorys.name) private CategorysModel: Model<Categorys>,
+    @InjectModel(Category.name) private CategorysModel: Model<Category>,
     private readonly postsService: PostsService,
   ) {}
 
@@ -57,6 +57,7 @@ export class CategorysService {
     };
   }
 
+  // دریافت دسته و زیردسته با اسلاگ
   async findOne(slug: string) {
     const findCategory = await this.CategorysModel.find({ slug });
 
@@ -142,7 +143,14 @@ export class CategorysService {
   // دریافت تمام پست های یه دسته با اسلاگ
   async findOneCtergoryPost(slug) {
     // دریافت دسته همراه با زیرشاخه
-    const { data: categoryData } = await this.findOne(slug);
+    const { data: categoryData, statusCode } = await this.findOne(slug);
+
+    if (statusCode == 204) {
+      return {
+        statusCode: 204,
+        error: 'دسته ای یافت نشد.',
+      };
+    }
 
     let PostsCategory: any = []; // پست ها
 
@@ -157,9 +165,8 @@ export class CategorysService {
         PostsCategory.push(posts);
       }
     }
-
     return {
-      statusCode: 201,
+      statusCode: 200,
       data: PostsCategory,
     };
   }

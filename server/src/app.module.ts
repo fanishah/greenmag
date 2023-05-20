@@ -4,7 +4,7 @@ import { LoggerMiddleware } from './logger/logger.middleware';
 import { UsersModule } from './users/users.module';
 import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
-import { CategorysModule } from './categorys/categorys.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -12,7 +12,7 @@ import { CategorysModule } from './categorys/categorys.module';
     UsersModule,
     PostsModule,
     AuthModule,
-    CategorysModule,
+    CategoryModule,
   ],
   providers: [],
 })
