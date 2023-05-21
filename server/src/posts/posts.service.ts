@@ -5,7 +5,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Posts } from 'src/schemas/posts.schema';
 import { Model } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
-import { find } from 'rxjs';
 
 @Injectable()
 export class PostsService {
