@@ -6,6 +6,7 @@ import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
 import { CommentsModule } from './comments/comments.module';
+import { ToptenModule } from './topten/topten.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { CommentsModule } from './comments/comments.module';
     AuthModule,
     CategoryModule,
     CommentsModule,
+    ToptenModule,
   ],
   providers: [],
 })
