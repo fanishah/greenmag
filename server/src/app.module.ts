@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './category/category.module';
 import { CommentsModule } from './comments/comments.module';
 import { ToptenModule } from './topten/topten.module';
+import { SearchModule } from './search/search.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { ToptenModule } from './topten/topten.module';
     CategoryModule,
     CommentsModule,
     ToptenModule,
+    SearchModule,
   ],
   providers: [],
 })
