@@ -16,6 +16,10 @@ export class CreatePostDto {
 
   @IsBoolean()
   @IsOptional()
+  image: string;
+
+  @IsBoolean()
+  @IsOptional()
   comment_status: Boolean;
 
   @IsBoolean()

@@ -17,6 +17,9 @@ export class Posts {
   @Prop({ required: true })
   category: string;
 
+  @Prop({ required: true })
+  image: string;
+
   @Prop({ required: true, default: true })
   comment_status: Boolean;
 

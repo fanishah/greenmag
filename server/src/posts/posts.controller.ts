@@ -8,12 +8,17 @@ import {
   Delete,
   UseGuards,
   Req,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipeBuilder,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { Request } from 'express';
+import { Request, Express } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { MulterSetting, UploadedFileSetting } from './utils/multer.setting';
 
 @Controller('posts')
 export class PostsController {
@@ -21,7 +26,16 @@ export class PostsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  create(@Body() createPostDto: CreatePostDto, @Req() req: Request) {
+  @UseInterceptors(FileInterceptor('image', MulterSetting))
+  create(
+    @Body() createPostDto: CreatePostDto,
+    @UploadedFile(UploadedFileSetting)
+    image: Express.Multer.File,
+    @Req() req: Request,
+  ) {
+    // اضافه کردن نام عکس به ورودی کاربر
+    createPostDto['image'] = image.filename;
+
     return this.postsService.create(createPostDto, req);
   }
 
@@ -50,4 +64,14 @@ export class PostsController {
   remove(@Param('slug') slug: string, @Req() req: Request) {
     return this.postsService.remove(slug, req);
   }
+  // @Post('upload')
+  // @UseInterceptors(FileInterceptor('image', MulterSetting))
+  // uploadFile(
+  //   @Body() createPostDto: any,
+  //   @UploadedFile(UploadedFileSetting)
+  //   image: Express.Multer.File,
+  // ) {
+
+  //   return { createPostDto };
+  // }
 }

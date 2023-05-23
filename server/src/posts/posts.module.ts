@@ -5,6 +5,7 @@ import { Posts, PostsSchema } from '../schemas/posts.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersService } from 'src/users/users.service';
 import { Users, UsersSchema } from 'src/schemas/users.schema';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -12,6 +13,9 @@ import { Users, UsersSchema } from 'src/schemas/users.schema';
       { name: Users.name, schema: UsersSchema },
       { name: Posts.name, schema: PostsSchema },
     ]),
+    MulterModule.register({
+      dest: './public',
+    }),
   ],
   controllers: [PostsController],
   providers: [PostsService, UsersService],

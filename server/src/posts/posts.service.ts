@@ -5,6 +5,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Posts } from 'src/schemas/posts.schema';
 import { Model } from 'mongoose';
 import { UsersService } from 'src/users/users.service';
+import { unlink } from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class PostsService {
@@ -32,14 +34,30 @@ export class PostsService {
 
     // شرط بودن پست به اسلاگ دریافتی
     if (FindPost) {
+      // آدرس عکس آپلود شده
+      const pathImage = join(
+        __dirname,
+        '..',
+        '..',
+        'public',
+        'img',
+        createPostDto.image,
+      );
+
+      // پاک کردن عکس آپلود شده
+      unlink(pathImage, (err) => {
+        if (err) throw err;
+      });
+
       return {
         statusCode: 400,
       };
     }
 
-    // ثبت نویسنده پست
+    // ثبت آیدی نویسنده پست
     createPostDto.author = id;
 
+    // ایجاد پست در دیتابیس
     await this.PostsModel.create(createPostDto);
 
     return {
