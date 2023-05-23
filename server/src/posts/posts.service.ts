@@ -43,7 +43,7 @@ export class PostsService {
         'img',
         createPostDto.image,
       );
-
+      
       // پاک کردن عکس آپلود شده
       unlink(pathImage, (err) => {
         if (err) throw err;

@@ -20,6 +20,12 @@ export class Posts {
   @Prop({ required: true })
   image: string;
 
+  @Prop({ required: true, default: null })
+  metatag_keywords: string;
+
+  @Prop({ required: true, default: null })
+  metatag_des: string;
+
   @Prop({ required: true, default: true })
   comment_status: Boolean;
 
