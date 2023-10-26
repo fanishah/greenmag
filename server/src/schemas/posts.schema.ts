@@ -15,7 +15,7 @@ export class Posts {
   author: string;
 
   @Prop({ required: true })
-  category: string;
+  category: string[];
 
   @Prop({ required: true })
   image: string;

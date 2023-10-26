@@ -18,8 +18,8 @@ export class CreatePostDto {
   @IsOptional()
   author: string;
 
-  @IsString()
-  category: string;
+  @IsArray()
+  category: string[];
 
   @IsBoolean()
   @IsOptional()
